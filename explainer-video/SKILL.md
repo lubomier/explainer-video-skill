@@ -54,7 +54,11 @@ Set the tool paths once per shell or in the project's `.env`:
 
 ```bash
 SKILL=~/.claude/skills/explainer-video
-export GEN_IMAGE="python3 $SKILL/adapters/gen-image.py"
+if [ -n "$GEMINI_API_KEY" ]; then
+  export GEN_IMAGE="python3 $SKILL/adapters/gen-image.py"
+else
+  export GEN_IMAGE="python3 $SKILL/adapters/gen-image-agy.py"   # no key: agy on a subscription
+fi
 export GEN_SPEECH="python3 $SKILL/adapters/gen-speech.py"
 export GEN_SFX="python3 $SKILL/adapters/gen-sfx.py"
 export CUTOUT="python3 $SKILL/adapters/cutout.py"

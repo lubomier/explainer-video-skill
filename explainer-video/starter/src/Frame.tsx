@@ -81,8 +81,9 @@ const CloseCard: React.FC = () => {
 /** Corner logo over the body. Bottom right, above the subtitle band, faded in and out. */
 const Bug: React.FC<{ len: number }> = ({ len }) => {
   const f = useCurrentFrame();
+  // the fade needs 10 + 20 in + 20 out + 10 frames; a shorter body (an empty storyboard) shows no logo
+  if (!BUG || len <= 60) return null;
   const o = interpolate(f, [10, 30, len - 30, len - 10], [0, 1, 1, 0], clamp);
-  if (!BUG) return null;
   return (
     <div style={{ position: "absolute", right: 40, bottom: 230, padding: "10px 16px", borderRadius: 12,
       background: "rgba(10,8,25,0.55)", opacity: 0.9 * o, lineHeight: 0 }}>

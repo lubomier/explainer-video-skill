@@ -46,7 +46,7 @@ def main() -> int:
     except ImportError:
         sys.exit("install the adapter dependencies: pip install google-genai pillow")
     if not os.environ.get("GEMINI_API_KEY"):
-        sys.exit("set GEMINI_API_KEY (AI Studio)")
+        sys.exit("set GEMINI_API_KEY (AI Studio), or use gen-image-agy.py on a subscription")
 
     parts = [types.Part.from_text(text=args.prompt)]
     for f in args.input:

@@ -19,7 +19,9 @@ dir="$root/$name"
 mkdir -p "$dir"/{in/storyboards,in/ref,assets/{voice,voice-norm,music},src,scripts,work,out}
 mkdir -p "$dir"/public/{voice-norm,mouth,sfx,brand,fonts,characters,backgrounds,props,screens,faces}
 cp -r "$skill/starter/." "$dir/"
-sed -i "s/\"name\": \"explainer-starter\"/\"name\": \"$name\"/" "$dir/package.json"
+# -i.bak works with both GNU and BSD (macOS) sed
+sed -i.bak "s/\"name\": \"explainer-starter\"/\"name\": \"$name\"/" "$dir/package.json"
+rm "$dir/package.json.bak"
 printf '{\n "gap_s": 0.4,\n "voices": {},\n "beats": []\n}\n' > "$dir/storyboard.json"
 # a silent placeholder, replaced by fit-music.py: the layout check wants every staticFile() to exist
 ffmpeg -nostdin -y -v error -f lavfi -i anullsrc=r=44100:cl=mono -t 1 -b:a 128k "$dir/public/music.mp3"

@@ -116,6 +116,7 @@ def main() -> int:
         return 0
     if not args.text or not args.output:
         ap.error("text and output are required")
+    text = args.text
 
     out = Path(args.output)
     if not out.parent.is_dir():

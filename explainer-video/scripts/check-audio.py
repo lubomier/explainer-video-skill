@@ -39,8 +39,18 @@ SR = 48000
 FPS = 30
 
 
+def channels(path):
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=channels",
+                          "-of", "csv=p=0", path], capture_output=True, text=True, check=True).stdout.strip()
+    return int(out or 1)
+
+
 def decode(path):
-    raw = subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-i", path, "-vn", "-ac", "1", "-ar", str(SR),
+    # Remotion puts a mono voice into both channels at -3 dB, so the mono of the mix is (L + R) / sqrt(2).
+    # ffmpeg does that for an unknown layout (a Remotion WAV) but averages a stereo mp4: 3 dB apart.
+    # Do it explicitly, so the mp4 and the WAV of the same mix decode to the level of the voice track.
+    mono = ["-af", "pan=mono|c0=0.70710678*c0+0.70710678*c1"] if channels(path) == 2 else ["-ac", "1"]
+    raw = subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-i", path, "-vn", *mono, "-ar", str(SR),
                           "-f", "f32le", "-"], capture_output=True, check=True).stdout
     return np.frombuffer(raw, dtype=np.float32)
 

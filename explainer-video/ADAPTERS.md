@@ -26,7 +26,19 @@ export GEMINI_API_KEY=...        # images, AI Studio
 export ELEVENLABS_API_KEY=...    # speech, sound effects, music
 ```
 
-`edge-tts` speech and `rembg` cutouts need no key. A keyless setup can draw nothing, but it can
+`edge-tts` speech and `rembg` cutouts need no key.
+
+Without `GEMINI_API_KEY`, set `GEN_IMAGE` to `gen-image-agy.py`. It draws through the `agy` CLI
+(Antigravity) on the Google subscription that is logged in to it. It follows the same contract,
+with three differences:
+
+- It ignores `--model`. agy picks its own image model.
+- It takes 40 to 50 s per image, because an agent runs around each call.
+- It reads the agy transcript and fails, with no output file, if agy changed the prompt, the
+  aspect ratio or the input images. It retries once.
+
+agy uses the account in `~/.gemini/google_accounts.json`. Do not send employer material through a
+personal account. A keyless setup can draw nothing, but it can
 still build a full schematic video: SVG scenes, free voices, your own music file.
 
 System tools: `ffmpeg` and `ffprobe` on `PATH`, and `numpy` for the audio scripts.
